@@ -13,6 +13,7 @@ Dropbox Linked
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.5/less.min.js"></script>
 <link   rel="stylesheet"       href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" >
 <link   rel="stylesheet/less"  href="./less/main.less" type="text/css" />
+<link   rel="stylesheet"       href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,400italic,700italic"  type="text/css">
  -->
 
 <!-- 
@@ -25,86 +26,10 @@ Local Linked -->
 <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <link   rel="stylesheet"       href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" >
-<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
-<script>
-// require hogan
-var resultStringTemplate = Hogan.compile("{{CNN}} {{street1}} {{street2}} {{street3}} {{street4}} {{street5}}");
-
-function rowString(row) {
-  return resultStringTemplate.render(row);
-}
-
-function prettyRowString(row) {
-  return rowString(row);
-}
-
-// function promoteOrAddSuggestion(array, suggestion) {
-
-// }
-
-angular.module('search', []).controller('Main', ['$scope', function($scope) {
-  d3.csv('./IntersectionLookup.csv', function(d) {
-    // Edit data model here.
-    return d;
-  }, function(dataset) {
-    // Setup page w/ data here.
-    // constructs the suggestion engine
-    $scope.totalRows = dataset.length;
-    $scope.cnnSelectionHistory = [];
-    $scope.selectSuggestion = function(suggestion) {
-      $scope.selectedCNN = suggestion.data;
-      var oldIndex = $scope.cnnSelectionHistory.indexOf(suggestion.data);
-      if( oldIndex > -1) {
-        $scope.cnnSelectionHistory.splice(oldIndex, 1);
-        $scope.cnnSelectionHistory.splice(0, 0, suggestion.data);
-      } else {
-        $scope.cnnSelectionHistory.unshift(suggestion.data);
-      }
-       //AngularJS ng-repeat doesn't like duplicates
-    };
-
-    $scope.selectHistoryItem = function(item) {
-      $scope.selectedCNN = item;
-    }
-
-    $scope.$apply();
-    var trafficHound = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-      queryTokenizer: function(str) { 
-        var tokens = Bloodhound.tokenizers.whitespace(str);
-        tokens = tokens.filter(function(token){
-          var tokenIsAnd = /^(and)$|^&$/i.test(token);
-          return tokenIsAnd ? (tokens.length == 1) : true; 
-        });
-        return tokens;
-      },
-      // Bloodhound.tokenizers.whitespace,
-      limit: 101,
-      local: $.map(dataset, function(row) { 
-        return { 
-          data: row,
-          value: rowString(row),
-          displayValue: prettyRowString(row)
-        }; 
-      })
-    });
-     
-    // kicks off the loading/processing of `local` and `prefetch`
-    trafficHound.initialize();
-
-    $scope.$watch('searchText', function(newValue, oldValue) {
-      var query = newValue;
-      trafficHound.get(query, function(suggestions) {
-        $scope.suggestions = suggestions;
-        $scope.matchingSuggestionsCount = (suggestions.length > 100) ? '100+' : suggestions.length;
-      });
-    }); //end $scope.$watch
-  });//end d3.csv
-}]);//end .controller
+<link   rel="stylesheet"       href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,400italic,700italic" type="text/css">
 
 
-</script>
+<script type="text/javascript" src="./js/main.js"> </script>
 
 <style>
   td { text-transform: capitalize; }
@@ -151,7 +76,13 @@ angular.module('search', []).controller('Main', ['$scope', function($scope) {
             <tbody> 
               <tr ng-repeat="selection in cnnSelectionHistory" ng-click="selectHistoryItem(selection)"> 
                 <td> {{ selection['CNN'] }} </td>
-                <td> {{ selection['street1'] | lowercase }} & {{ selection['street2'] | lowercase }} </td>
+                <td> 
+                  <span ng-if="selection.street1"> {{ selection['street1'] | lowercase }} </span>
+                  <span ng-if="selection.street2"> & {{ selection['street2'] | lowercase }} </span>
+                  <span ng-if="selection.street3"> & {{ selection['street3'] | lowercase }} </span>
+                  <span ng-if="selection.street4"> & {{ selection['street4'] | lowercase }} </span>
+                  <span ng-if="selection.street5"> & {{ selection['street5'] | lowercase }} </span>
+                </td>
               </tr>
             </tbody>
           </table>
