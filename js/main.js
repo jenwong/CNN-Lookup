@@ -31,6 +31,18 @@ function addOrPromoteObjectInArray(array, obj) {
 }
 
 angular.module('search', []).controller('Main', ['$scope', function($scope) {
+
+  $scope.streets = {
+    'csvKeys' : ['street1', 'street2', 'street3', 'street4', 'street5'],
+    'prettyNames' : ['Street 1', 'Street 2', 'Street 3', 'Street 4', 'Street 5'],
+    'csvKeysAndNames' : [
+      { key: 'street1', name: 'Street 1' },
+      { key: 'street2', name: 'Street 2' }, 
+      { key: 'street3', name: 'Street 3' }, 
+      { key: 'street4', name: 'Street 4' }, 
+      { key: 'street5', name: 'Street 5' }]
+  }
+
   d3.csv('./IntersectionLookup.csv', function(d) {
     // Edit data model here.
     return d;

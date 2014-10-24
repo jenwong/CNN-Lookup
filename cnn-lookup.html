@@ -39,7 +39,7 @@ Local Linked -->
 </style>
 
 </head>
-<body ng-controller="Main">
+<body ng-controller="Main" ng-init"streetKeys = ['street1', 'street2', 'street3', 'street4', 'street5']">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-3">
@@ -53,6 +53,7 @@ Local Linked -->
     <div class="row">
       <div class="col-md-3">
 
+        <!-- Begin Last CNN Panel -->
         <div class="panel panel-default">
           <div class="panel-heading clear">
             <span >Selected CNN: {{selectedCNN.CNN || 'None' }}</span> 
@@ -60,15 +61,14 @@ Local Linked -->
           </div>
           <table class="table table-condensed">
             <tbody> 
-              <tr ng-if="selectedCNN.street1"><td>Street 1</td><td> {{selectedCNN.street1 || '' | lowercase }}</td></tr>
-              <tr ng-if="selectedCNN.street2"><td>Street 2</td><td> {{selectedCNN.street2 || '' | lowercase }}</td></tr>
-              <tr ng-if="selectedCNN.street3"><td>Street 3</td><td> {{selectedCNN.street3 || '' | lowercase }}</td></tr>
-              <tr ng-if="selectedCNN.street4"><td>Street 4</td><td> {{selectedCNN.street4 || '' | lowercase }}</td></tr>
-              <tr ng-if="selectedCNN.street5"><td>Street 5</td><td> {{selectedCNN.street5 || '' | lowercase }}</td></tr>
+              <tr ng-repeat="street in streets.csvKeysAndNames" ng-if="selectedCNN[street.key]">
+                <td>{{street.name}}</td><td> {{selectedCNN[street.key] || '' | lowercase }}</td>
+              </tr>
             </tbody>
           </table>
         </div><!-- End Last CNN Panel -->
 
+        <!-- Begin Search History -->
         <div class="panel panel-default">
           <div class="panel-heading">Search History</div>
           <table class="table table-condensed table-hover table-clickable">
@@ -77,11 +77,9 @@ Local Linked -->
               <tr ng-repeat="selection in cnnSelectionHistory" ng-click="selectHistoryItem(selection)"> 
                 <td> {{ selection['CNN'] }} </td>
                 <td> 
-                  <span ng-if="selection.street1"> {{ selection['street1'] | lowercase }} </span>
-                  <span ng-if="selection.street2"> & {{ selection['street2'] | lowercase }} </span>
-                  <span ng-if="selection.street3"> & {{ selection['street3'] | lowercase }} </span>
-                  <span ng-if="selection.street4"> & {{ selection['street4'] | lowercase }} </span>
-                  <span ng-if="selection.street5"> & {{ selection['street5'] | lowercase }} </span>
+                  <span ng-repeat="streetKey in streets.csvKeys" ng-if="selection[streetKey]"> 
+                    <span ng-if="$index > 0"> & </span> {{ selection[streetKey] | lowercase }} 
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -91,7 +89,7 @@ Local Linked -->
       </div> <!-- End col-md-4 -->
       <div class="col-md-9">
 
-
+        <!-- Begin Search Box -->
         <div class="input-group">
           <span class="input-group-addon">Search:</span>
           <input class="form-control" ng-model="searchText" style="width: 600px; display: block;" type="text" placeholder="Search by street or cnn.">
@@ -100,6 +98,7 @@ Local Linked -->
         <span ng-if="totalRows"> {{matchingSuggestionsCount || '0'}} matches </span>
         <br/>
 
+        <!-- Begin Search Table -->
         <table class="table table-striped table-hover table-clickable">
           <thead>
             <tr>
@@ -114,14 +113,12 @@ Local Linked -->
           <tbody>
             <tr ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)">
               <td> {{ suggestion['data']['CNN']  }} </td>
-              <td> {{ suggestion['data']['street1'] | lowercase }} </td>
-              <td> {{ suggestion['data']['street2'] | lowercase }} </td>
-              <td> {{ suggestion['data']['street3'] | lowercase }} </td>
-              <td> {{ suggestion['data']['street4'] | lowercase }} </td>
-              <td> {{ suggestion['data']['street5'] | lowercase }} </td>
+              <td ng-repeat="streetKey in streets.csvKeys"> 
+                {{ suggestion['data'][streetKey] | lowercase }} 
+              </td>
             </tr>
           </tbody>
-        </table>
+        </table><!-- End Search Table -->
       </div>
     </div> <!-- End Row 2 -->
 
