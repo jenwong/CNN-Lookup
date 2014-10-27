@@ -78,7 +78,8 @@ angular.module('search', []).controller('Main', ['$scope', function($scope) {
         return { 
           data: row,
           value: rowString(row),
-          displayValue: prettyRowString(row)
+          displayValue: prettyRowString(row),
+          CNN: row['CNN']
         }; 
       })
     });

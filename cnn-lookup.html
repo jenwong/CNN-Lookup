@@ -111,11 +111,21 @@ Local Linked -->
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="suggestion in suggestions" ng-click="selectSuggestion(suggestion)">
-              <td> {{ suggestion['data']['CNN']  }} </td>
+            <tr ng-repeat="suggestion in suggestions track by suggestion.CNN" ng-click="selectSuggestion(suggestion)">
+              <td> {{ ::suggestion['data']['CNN']  }} </td>
+              <td> {{ ::suggestion['data']['street1'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['street2'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['street3'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['street4'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['street5'] | lowercase }} </td>
+
+              <!--  This binding is too slow..
+              <td> {{ ::suggestion['data']['CNN']  }} </td>
               <td ng-repeat="streetKey in streets.csvKeys"> 
-                {{ suggestion['data'][streetKey] | lowercase }} 
-              </td>
+                {{ ::suggestion['data'][streetKey] | lowercase }} 
+              </td> 
+              -->
+
             </tr>
           </tbody>
         </table><!-- End Search Table -->
