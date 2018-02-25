@@ -1,7 +1,7 @@
 # CNN Lookup
 
-[Intersection CNN Lookup](https://jenwong.github.io/CNN-Lookup/intersection-lookup.html)
-[Block CNN Lookup](https://jenwong.github.io/CNN-Lookup/block-lookup.html)
+- [Intersection CNN Lookup](https://jenwong.github.io/CNN-Lookup/intersection-lookup.html)
+- [Block CNN Lookup](https://jenwong.github.io/CNN-Lookup/block-lookup.html)
 
 ## Instructions
 
