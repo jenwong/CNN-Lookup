@@ -1,10 +1,10 @@
 #CNN Lookup
 
-##Could Do
+[CNN Lookup](https://jenwong.github.io/CNN-Intersection-Lookup/cnn-lookup.html)
 
-- Map CNNs
-  - requires GPS points
-- Regex search queries
-- Shareable URL (using `www.thewebpage.com/#querytexthere`)
-- Comma Separated queries to pull up multiple records at a time
-- `x` to clear Search History
+## Instructions
+
+- Search streets separated by spaces to narrow selection.
+- Click row in search results to save & view in side bar
+- Click item in search histroy to view street segments again
+
