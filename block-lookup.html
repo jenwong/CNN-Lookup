@@ -109,7 +109,6 @@ Local Linked
         <table class="table table-striped table-hover table-clickable">
           <thead>
             <tr>
-              <th> Object ID </th>
               <th> Block (CNN) </th>
               <th> Intersection A (CNN) </th>
               <th> Intersection B (CNN) </th>
@@ -118,7 +117,6 @@ Local Linked
           </thead>
           <tbody>
             <tr ng-repeat="suggestion in suggestions track by suggestion.CNN" ng-click="selectSuggestion(suggestion)">
-              <td> {{ ::suggestion['data']['objectid']  }} </td>
               <td> {{ ::suggestion['data']['cnn'] | roundIfNumber }} | {{ ::suggestion['data']['streetname'] | lowercase }}</td>
               <td> {{ ::suggestion['data']['Intersecti'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_Stre'] | lowercase }} </td>
               <td> {{ ::suggestion['data']['Intersec_1'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_St_1'] | lowercase }} </td>
