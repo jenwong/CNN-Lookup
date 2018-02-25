@@ -1,4 +1,4 @@
-#CNN Lookup
+# CNN Lookup
 
 [CNN Lookup](https://jenwong.github.io/CNN-Intersection-Lookup/cnn-lookup.html)
 
