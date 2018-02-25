@@ -1,0 +1,138 @@
+<html ng-app='search'>
+<head>
+
+<title>Block Lookup</title>
+<!-- 
+Dropbox Linked -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hogan.js/3.0.2/hogan.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.12/d3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.5/angular.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.5/less.min.js"></script>
+<link   rel="stylesheet"       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" >
+<link   rel="stylesheet/less"  href="./less/main.less" type="text/css" />
+<link   rel="stylesheet"       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,400italic,700italic"  type="text/css">
+
+
+<!-- 
+Local Linked
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/hogan.js/3.0.2/hogan.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.12/d3.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.5/angular.min.js"></script> 
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<link   rel="stylesheet"       href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" >
+<link   rel="stylesheet"       href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700,400italic,700italic" type="text/css">
+ -->
+
+<script type="text/javascript" src="./js/block-page.js"> </script>
+
+<style>
+  td { text-transform: capitalize; }
+  h1, th { color: #6A953F; font-weight: 700; }
+  body { font-family: "Source Sans Pro",sans-serif; }
+  .table-clickable tr { cursor: pointer; }
+</style>
+
+</head>
+<body ng-controller="Main" ng-init"streetKeys = ['street1', 'street2', 'street3', 'street4', 'street5']">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <h1>Block Lookup </h1>
+      </div>
+      <div class="col-md-9">
+        
+      </div>
+    </div><!-- End Row 1 -->  
+
+    <div class="row">
+      <div class="col-md-3">
+
+        <!-- Begin Last CNN Panel -->
+        <div class="panel panel-default">
+          <div class="panel-heading clear">
+            <span >Selected Block: {{selectedBlock.blockID || 'None' }}</span> 
+
+          </div>
+          <table class="table table-condensed">
+            <tbody> 
+              <tr ng-repeat="block in blockDescription.csvKeysAndNames" ng-if="selectedItem[block.key]">
+                <td>{{block.name}}</td><td> {{selectedItem[block.key] || '' | lowercase | roundIfNumber }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- End Last CNN Panel -->
+
+        <!-- Begin Search History -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Search History</div>
+          <table class="table table-condensed table-hover table-clickable">
+            <thead> <th>CNN</th> <th> Address </th> </thead>
+            <tbody> 
+              <tr ng-repeat="selection in selectionHistory" ng-click="selectHistoryItem(selection)"> 
+                <td> {{ selection['cnn'] | roundIfNumber}} </td>
+                <td> 
+                  <p> {{ selection['streetname'] }} </p>
+                  <p> {{ selection['Limits'] }} </p>
+<!--                   <span ng-repeat="key in blockDescription.csvKeys" ng-if="selection[key]"> 
+                    <span ng-if="$index > 0"> & </span> {{ selection[key] | lowercase | roundIfNumber }} 
+                  </span> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- End Search History -->
+
+      </div> <!-- End col-md-4 -->
+      <div class="col-md-9">
+
+        <!-- Begin Search Box -->
+        <div class="input-group">
+          <span class="input-group-addon">Search:</span>
+          <input class="form-control" ng-model="searchText" style="width: 600px; display: block;" type="text" placeholder="Search by street or cnn.">
+        </div>
+        <span> {{totalRows || 'Loading the '}} CNNs to search </span>
+        <span ng-if="totalRows"> {{matchingSuggestionsCount || '0'}} matches </span>
+        <br/>
+
+        <!-- Begin Search Table -->
+        <table class="table table-striped table-hover table-clickable">
+          <thead>
+            <tr>
+              <th> Object ID </th>
+              <th> Block (CNN) </th>
+              <th> Intersection A (CNN) </th>
+              <th> Intersection B (CNN) </th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="suggestion in suggestions track by suggestion.CNN" ng-click="selectSuggestion(suggestion)">
+              <td> {{ ::suggestion['data']['objectid']  }} </td>
+              <td> {{ ::suggestion['data']['cnn'] | roundIfNumber }} | {{ ::suggestion['data']['streetname'] | lowercase }}</td>
+              <td> {{ ::suggestion['data']['Intersecti'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_Stre'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['Intersec_1'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_St_1'] | lowercase }} </td>
+
+
+              <!--  This binding is too slow..
+              <td> {{ ::suggestion['data']['CNN']  }} </td>
+              <td ng-repeat="streetKey in streets.csvKeys"> 
+                {{ ::suggestion['data'][streetKey] | lowercase }} 
+              </td> 
+              -->
+
+            </tr>
+          </tbody>
+        </table><!-- End Search Table -->
+      </div>
+    </div> <!-- End Row 2 -->
+
+   </div><!-- End Container -->
+</body>
+
+</html>
