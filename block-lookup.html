@@ -118,8 +118,8 @@ Local Linked
           <tbody>
             <tr ng-repeat="suggestion in suggestions track by suggestion.CNN" ng-click="selectSuggestion(suggestion)">
               <td> {{ ::suggestion['data']['cnn'] | roundIfNumber }} | {{ ::suggestion['data']['streetname'] | lowercase }}</td>
-              <td> {{ ::suggestion['data']['Intersecti'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_Stre'] | lowercase }} </td>
-              <td> {{ ::suggestion['data']['Intersec_1'] | roundIfNumber}} | {{ ::suggestion['data']['Cross_St_1'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['from_cnn'] | roundIfNumber}} | {{ ::suggestion['data']['from_st'] | lowercase }} </td>
+              <td> {{ ::suggestion['data']['to_cnn'] | roundIfNumber}} | {{ ::suggestion['data']['to_st'] | lowercase }} </td>
 
 
               <!--  This binding is too slow..
