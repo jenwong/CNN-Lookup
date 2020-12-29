@@ -43,7 +43,7 @@ angular.module('search', []).controller('Main', ['$scope', function($scope) {
       { key: 'street5', name: 'Street 5' }]
   }
 
-  d3.csv('./IntersectionLookup.csv', function(d) {
+  d3.csv('./data/intersections.csv', function(d) {
     // Edit data model here.
     return d;
   }, function(dataset) {
