@@ -1,5 +1,5 @@
 // require hogan
-var resultStringTemplate = Hogan.compile("{{objectid}} {{cnn}} {{streetname}} {{Intersecti}} {{Intersec_1}} {{Cross_Stre}} {{Cross_St_1}}");
+var resultStringTemplate = Hogan.compile("{{objectid}} {{CNN}} {{streetname}} {{from_cnn}} {{to_cnn}} {{from_st}} {{to_st}}");
  
 function rowString(row) {
   return resultStringTemplate.render(row);
@@ -33,16 +33,16 @@ function addOrPromoteObjectInArray(array, obj) {
 var app = angular.module('search', []).controller('Main', ['$scope', function($scope) {
  
   $scope.blockDescription = {
-    'csvKeys' : ['objectid', 'cnn', 'streetname', 'Intersecti', 'Intersec_1', 'Cross_Stre', 'Cross_St_1'],
+    'csvKeys' : ['objectid', 'CNN', 'streetname', 'from_cnn', 'to_cnn', 'from_st', 'to_st'],
     'prettyNames' : ['Block ID', 'Block CNN', 'Street Name', 'First Intersection CNN', 'Second Intersection CNN', 'First Cross Street', 'Second Cross Street'],
     'csvKeysAndNames' : [
       { key: 'objectid', name: 'Block ID'},
-      { key: 'cnn', name: 'Block CNN'},
+      { key: 'CNN', name: 'Block CNN'},
       { key: 'streetname', name: 'Street Name'},
-      { key: 'Intersecti', name: 'First Intersection CNN'},
-      { key: 'Intersec_1', name: 'Second Intersection CNN'},
-      { key: 'Cross_Stre', name: 'First Cross Street'},
-      { key: 'Cross_St_1', name: 'Second Cross Street'},
+      { key: 'from_cnn', name: 'First Intersection CNN'},
+      { key: 'to_cnn', name: 'Second Intersection CNN'},
+      { key: 'from_st', name: 'First Cross Street'},
+      { key: 'to_st', name: 'Second Cross Street'},
     ]
   }
  
@@ -82,7 +82,7 @@ var app = angular.module('search', []).controller('Main', ['$scope', function($s
           data: row,
           value: rowString(row),
           displayValue: prettyRowString(row),
-          CNN: row['cnn'],
+          CNN: row['CNN'],
           blockID: row['objectid']
         }; 
       })
